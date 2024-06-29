@@ -1,10 +1,25 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 function Settings() {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [loader, setLoader] = useState("Save Settings");
+
+  useEffect(()=>{
+    fetch('https://plugindev.local/wp-json/wprest/v1/settings')
+    .then(response => {
+      if(response){
+        return response.json();
+      }
+    })
+    .then(data => {
+        setFirstname(data?.firstname);
+        setLastname(data?.lastname);
+        setEmail(data?.email);
+    })
+    .catch(error => console.error(error))
+  }, []);
 
   const handleSubmit = e => {
     e.preventDefault();
