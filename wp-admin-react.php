@@ -58,3 +58,5 @@ class WP_Create_Admin_Page {
 }
 
 new WP_Create_Admin_Page();
+
+require_once WPADMIN_PATH . 'classes/rest-api-create.php';
