@@ -1,27 +1,21 @@
 <?php
-use function False\true;
 class React_Rest_API {
 	
 	public function __construct() {
 		add_action( 'rest_api_init', array( $this, 'create_rest_route') );
-		// add_action( 'init', array( $this, 'add_cors_http_header' ) );
-	}
-
-	function add_cors_http_header(){
-		header("Access-Control-Allow-Origin: *");
 	}
 
 	public function create_rest_route() {
 		register_rest_route( 'wprest/v1', '/settings', array(
-			'method'   => 'GET',
+			'methods'   => 'GET',
 			'callback' => array( $this, 'get_settings' ),
 			'permission_callback' => array( $this, 'get_setting_permission' )
 		) );
 
 		register_rest_route( 'wprest/v1', '/settings-post', array(
-			'method'   => 'POST',
+			'methods'   => 'POST',
 			'callback' => array( $this, 'save_settings' ),
-			'permission_callback' => array( $this, 'get_setting_permission' )
+			'permission_callback' => array( $this, 'save_setting_permission' )
 		) );
 	}
 
@@ -58,6 +52,10 @@ class React_Rest_API {
 		);
 		// if( !is_user_logged_in() ) return 'You are not logged in';
 		return rest_ensure_response ( $content );
+	}
+
+	public function save_setting_permission() {
+		return current_user_can( 'publish_posts' );
 	}
 
 }

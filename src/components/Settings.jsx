@@ -7,7 +7,7 @@ function Settings() {
   const [loader, setLoader] = useState("Save Settings");
 
   useEffect(()=>{
-    fetch('https://plugindev.local/wp-json/wprest/v1/settings')
+    fetch(`${appLocalizer.apiUrl}/wprest/v1/settings`)
     .then(response => {
       if(response){
         return response.json();
@@ -24,7 +24,31 @@ function Settings() {
   const handleSubmit = e => {
     e.preventDefault();
     setLoader("Saving...")
+
+    const data = {
+      firstname,
+      lastname,
+      email
+    }
     
+    fetch(`${appLocalizer.apiUrl}/wprest/v1/settings-post`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-WP-NONCE': appLocalizer.nonce
+      },
+      body: JSON.stringify(data)
+    })
+    .then(response => {
+      if(!response.ok) {
+        throw new Error('Network not responding')
+      }
+      return response.json();
+    })
+    .then(result => {
+      setLoader("Save Changes")
+    })
+    .catch(error => console.error(error))
   }
 
   return (
