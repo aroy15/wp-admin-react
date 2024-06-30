@@ -5,8 +5,10 @@ function Settings() {
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [loader, setLoader] = useState("Save Settings");
+  const [loaderGet, setLoaderGet] = useState("");
 
   useEffect(()=>{
+    setLoaderGet(<h3 style={{color:"red"}}>Data is fetching..</h3>);
     fetch(`${appLocalizer.apiUrl}/wprest/v1/settings`)
     .then(response => {
       if(response){
@@ -17,6 +19,7 @@ function Settings() {
         setFirstname(data?.firstname);
         setLastname(data?.lastname);
         setEmail(data?.email);
+        setLoaderGet("");
     })
     .catch(error => console.error(error))
   }, []);
@@ -54,6 +57,7 @@ function Settings() {
   return (
     <>
       <h2>React Settings Form</h2>
+      {loaderGet}
       <form action="" id="work-settings-form" onSubmit={e => handleSubmit(e)}>
         <table className="form-table" role="presentation">
           <tbody>
